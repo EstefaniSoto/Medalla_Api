@@ -1,6 +1,6 @@
-﻿namespace Medalla_Api.Dtos;
+﻿namespace Medalla_Api.Dtos.Candidata;
 
-public class CandidataUpdateDto
+public class CandidataCreateDto
 {
     public string Nombre { get; set; } = null!;
     public int CategoriaId { get; set; }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Medalla_Api.Models;
-using Medalla_Api.Dtos;
+using Medalla_Api.Dtos.Instituciones;
 
 namespace Medalla_Api.Controllers;
 
@@ -84,18 +84,25 @@ public class InstitucionesController : ControllerBase
         return Ok(institucion);
     }
 
-    // ===== DELETE =====
+    // ===== DELETE SEGURO =====
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var institucion = await _context.Instituciones.FindAsync(id);
+        var institucion = await _context.Instituciones
+            .Include(i => i.Usuarios)
+            .Include(i => i.VotosInstituciones)
+            .FirstOrDefaultAsync(i => i.InstitucionId == id);
 
         if (institucion == null)
-            return NotFound();
+            return NotFound("Institución no encontrada");
+
+        if (institucion.Usuarios.Any() || institucion.VotosInstituciones.Any())
+            return BadRequest("No se puede eliminar la institución porque tiene datos asociados.");
 
         _context.Instituciones.Remove(institucion);
         await _context.SaveChangesAsync();
 
-        return Ok();
+        return NoContent();
     }
+
 }

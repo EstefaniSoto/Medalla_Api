@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Medalla_Api.Models;
-using Medalla_Api.Dtos;
+using Medalla_Api.Dtos.Usuarios;
 
 namespace Medalla_Api.Controllers;
 
