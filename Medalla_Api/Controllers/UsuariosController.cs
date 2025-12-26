@@ -44,7 +44,7 @@ public class UsuariosController : ControllerBase
         {
             Nombre = dto.Nombre,
             Username = dto.Username,
-            PasswordHash = dto.Password, // 👈 SIN HASH
+            PasswordHash = dto.Password, 
             RoleId = dto.RoleId,
             InstitucionId = dto.InstitucionId
         };
@@ -93,4 +93,29 @@ public class UsuariosController : ControllerBase
 
         return Ok();
     }
+
+    //Login
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginDto dto)
+    {
+        var user = await _context.Usuarios
+            .Include(u => u.Role)
+            .FirstOrDefaultAsync(u =>
+                u.Username == dto.Username &&
+                u.PasswordHash == dto.Password
+            );
+
+        if (user == null)
+            return Unauthorized("Usuario o contraseña incorrectos");
+
+        return Ok(new
+        {
+            usuarioId = user.UsuarioId,
+            nombre = user.Nombre,
+            role = user.Role.Name,
+            institucionId = user.InstitucionId
+        });
+    }
+
 }

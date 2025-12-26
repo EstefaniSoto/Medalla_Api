@@ -42,33 +42,23 @@ namespace Medalla_Api.Controllers
 
         // POST: api/Categorias
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] CandidataCreateDto dto)
+        public async Task<IActionResult> Post([FromBody] CategoriaCreateDto dto)
         {
-            string? fotoUrl = null;
+            if (string.IsNullOrWhiteSpace(dto.Nombre))
+                return BadRequest("El nombre es obligatorio.");
 
-            if (dto.Foto != null)
-            {
-                var fileName = Guid.NewGuid() + Path.GetExtension(dto.Foto.FileName);
-                var path = Path.Combine("wwwroot/fotos", fileName);
-
-                using var stream = new FileStream(path, FileMode.Create);
-                await dto.Foto.CopyToAsync(stream);
-
-                fotoUrl = $"/fotos/{fileName}";
-            }
-
-            var candidata = new Candidata
+            var categoria = new Categoria
             {
                 Nombre = dto.Nombre,
-                CategoriaId = dto.CategoriaId,
-                FotoUrl = fotoUrl
+                Descripcion = dto.Descripcion
             };
 
-            _context.Candidatas.Add(candidata);
+            _context.Categorias.Add(categoria);
             await _context.SaveChangesAsync();
 
-            return Ok(candidata);
+            return Ok(categoria);
         }
+
 
 
         // PUT: api/Categorias/5
