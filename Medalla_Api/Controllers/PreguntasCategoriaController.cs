@@ -41,12 +41,7 @@ public class PreguntasCategoriaController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] PreguntaCategoriaCreateDto dto)
     {
-        // 🔒 Máximo 10 preguntas por categoría
-        var cantidad = await _context.PreguntasCategoria
-            .CountAsync(p => p.CategoriaId == dto.CategoriaId);
-
-        if (cantidad >= 10)
-            return BadRequest("La categoría ya tiene el máximo de 10 preguntas.");
+      
 
         // 🔒 Validar suma de puntajes ≤ 50
         var sumaActual = await _context.PreguntasCategoria
