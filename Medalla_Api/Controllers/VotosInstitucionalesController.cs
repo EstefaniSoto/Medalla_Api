@@ -71,7 +71,7 @@ public class VotosInstitucionalesController : ControllerBase
         return Ok(new { message = "Voto institucional registrado" });
     }
 
-    // 🔹 PODIO FINAL (TODAS LAS CANDIDATAS + VOTOS INSTITUCIONALES)
+    //PODIO FINAL (TODAS LAS CANDIDATAS + VOTOS INSTITUCIONALES)
     [HttpGet("podio/{categoriaId}")]
     public async Task<IActionResult> ObtenerPodioInstitucional(int categoriaId)
     {
@@ -83,7 +83,7 @@ public class VotosInstitucionalesController : ControllerBase
                 Nombre = c.Nombre,
                 FotoUrl = c.FotoUrl,
 
-                // 👇 CONTAMOS LOS VOTOS (SI NO TIENE → 0)
+                //CONTAMOS LOS VOTOS (SI NO TIENE → 0)
                 Votos = _context.VotosInstituciones
                     .Count(v => v.CandidataId == c.CandidataId)
             })
